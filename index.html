@@ -3,197 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>API Key Access - Bảo mật cao</title>
+    <title>Tạo Email Ảo - Made with by khangdevxcoder</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #3b82f6;
             --secondary: #8b5cf6;
             --accent: #ec4899;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark-bg: #0f172a;
+            --dark-card: #1e293b;
+            --dark-border: #334155;
+            --light-bg: #f8fafc;
+            --light-card: #ffffff;
+            --light-border: #e2e8f0;
         }
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-theme {
+            background: linear-gradient(45deg, var(--dark-bg), #1e293b, #334155);
             color: #f1f5f9;
-            min-height: 100vh;
         }
 
+        body.light-theme {
+            background: linear-gradient(45deg, #f1f5f9, #e2e8f0, #cbd5e1);
+            color: #1e293b;
+        }
+
+        /* Card */
         .card {
-            background: rgba(30, 41, 59, 0.8);
+            background: rgba(15, 23, 42, 0.85);
             backdrop-filter: blur(10px);
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border-radius: 24px;
+            box-shadow: 
+                0 10px 25px rgba(0, 0, 0, 0.3),
+                0 5px 10px rgba(0, 0, 0, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.1);
             overflow: hidden;
-            position: relative;
-            transition: transform 0.3s ease;
+            max-width: 1200px;
+            width: 100%;
         }
 
-        .card:hover {
-            transform: translateY(-5px);
+        body.light-theme .card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.1);
         }
 
-        .key-item {
-            background: rgba(15, 23, 42, 0.6);
-            border-radius: 8px;
-            padding: 16px;
-            margin-bottom: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .key-item:hover {
-            background: rgba(30, 41, 59, 0.8);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.2);
-        }
-
-        .key-value {
-            font-family: 'Courier New', monospace;
-            word-break: break-all;
-            color: #3b82f6;
-            font-size: 14px;
-            letter-spacing: 1px;
-        }
-
+        /* Nút */
         .btn {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 12px 24px;
-            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
             transition: all 0.3s ease;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
         }
 
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
         }
 
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .warning-box {
-            background: rgba(239, 68, 68, 0.1);
-            border-left: 4px solid #ef4444;
-            padding: 16px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+        /* Email item */
+        .email-item {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 
+                0 4px 6px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            animation: fadeInUp 0.5s ease forwards;
+            opacity: 0;
             position: relative;
             overflow: hidden;
         }
 
-        .warning-box::before {
-            content: '';
+        body.light-theme .email-item {
+            background: rgba(241, 245, 249, 0.8);
+            box-shadow: 
+                0 4px 6px rgba(0, 0, 0, 0.05),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .email-item:hover {
+            background: rgba(51, 65, 85, 0.7);
+            box-shadow: 
+                0 6px 12px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        body.light-theme .email-item:hover {
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 
+                0 6px 12px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6);
+        }
+
+        /* Copied indicator */
+        .copied-indicator {
             position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(239, 68, 68, 0.1) 0%, transparent 70%);
-            animation: pulse 3s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(0.8); opacity: 0.5; }
-            50% { transform: scale(1.2); opacity: 0.3; }
-            100% { transform: scale(0.8); opacity: 0.5; }
-        }
-
-        .countdown {
-            display: inline-flex;
-            align-items: center;
-            background: rgba(59, 130, 246, 0.2);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 14px;
-            margin-left: 10px;
-            border: 1px solid rgba(59, 130, 246, 0.3);
-        }
-
-        .countdown i {
-            margin-right: 6px;
-        }
-
-        .blocked-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            backdrop-filter: blur(5px);
-        }
-
-        .blocked-content {
-            text-align: center;
-            padding: 40px;
-            background: rgba(30, 41, 59, 0.95);
-            border-radius: 16px;
-            border: 1px solid rgba(239, 68, 68, 0.5);
-            max-width: 500px;
-            animation: slideIn 0.3s ease-out;
-        }
-
-        @keyframes slideIn {
-            from { transform: translateY(-50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .fingerprint {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 12px;
-            color: #64748b;
-            background: rgba(15, 23, 42, 0.6);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: rgba(16, 185, 129, 0.9);
+            color: white;
             padding: 4px 8px;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .rate-limit {
-            position: absolute;
-            top: 10px;
-            left: 10px;
+            border-radius: 6px;
             font-size: 12px;
-            color: #f59e0b;
-            background: rgba(15, 23, 42, 0.6);
-            padding: 4px 8px;
+            font-weight: 600;
+            z-index: 10;
+            transition: transform 0.3s ease;
+        }
+
+        .copied-indicator.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        /* Progress bar */
+        .progress-bar {
+            height: 8px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
             border-radius: 4px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transform-origin: left center;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
         }
 
-        .device-info {
-            margin-top: 20px;
-            padding: 16px;
-            background: rgba(15, 23, 42, 0.6);
-            border-radius: 8px;
-            font-size: 12px;
-            color: #64748b;
-            max-height: 200px;
-            overflow-y: auto;
+        .progress-bar.loading {
+            animation: loading 2s infinite ease-in-out;
         }
 
+        @keyframes loading {
+            0%, 100% { transform: scaleX(0); }
+            50% { transform: scaleX(0.7); }
+        }
+
+        /* Toast notification */
         .toast {
             position: fixed;
             top: 20px;
@@ -208,708 +177,1004 @@
             z-index: 1000;
             display: flex;
             align-items: center;
-            gap: 10px;
         }
 
         .toast.show {
             transform: translateX(0);
         }
 
-        .anti-debug {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 10000;
-            backdrop-filter: blur(5px);
+        /* Logo animation */
+        .logo {
+            display: inline-block;
+            animation: pulse 2s infinite;
         }
 
-        .anti-debug-content {
-            text-align: center;
-            padding: 40px;
-            background: rgba(30, 41, 59, 0.95);
-            border-radius: 16px;
-            border: 1px solid rgba(239, 68, 68, 0.5);
-            animation: shake 0.5s ease-out;
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
         }
 
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
-            20%, 40%, 60%, 80% { transform: translateX(10px); }
+        /* Cột grid cho email list */
+        .email-grid {
+            display: grid;
+            gap: 12px;
+            transition: grid-template-columns 0.3s ease;
         }
 
-        .security-badge {
+        body.dark-theme .email-grid {
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        }
+
+        body.light-theme .email-grid {
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        }
+
+        @media (max-width: 768px) {
+            body.dark-theme .email-grid,
+            body.light-theme .email-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Search box */
+        .search-box {
+            position: relative;
+        }
+
+        .search-box::after {
+            content: '\f002';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
             position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+        }
+
+        body.light-theme .search-box::after {
+            color: #94a3b8;
+        }
+
+        /* Custom scrollbar */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(30, 41, 59, 0.3);
+            border-radius: 4px;
+        }
+
+        body.light-theme .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(226, 232, 240, 0.5);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 4px;
+        }
+
+        body.light-theme .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+
+        body.light-theme .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Dropdown menu */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: var(--dark-card);
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        body.light-theme .dropdown-content {
+            background-color: var(--light-card);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .dropdown-content a {
+            color: #f1f5f9;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            transition: background-color 0.3s;
+        }
+
+        body.light-theme .dropdown-content a {
+            color: #1e293b;
+        }
+
+        .dropdown-content a:hover {
+            background-color: rgba(59, 130, 246, 0.2);
+        }
+
+        body.light-theme .dropdown-content a:hover {
+            background-color: rgba(59, 130, 246, 0.1);
+        }
+
+        .dropdown.show .dropdown-content {
+            display: block;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 8px;
+        }
+
+        .pagination button {
+            padding: 8px 12px;
+            border-radius: 6px;
+            background: rgba(30, 41, 59, 0.6);
+            color: #f1f5f9;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        body.light-theme .pagination button {
+            background: rgba(241, 245, 249, 0.8);
+            color: #1e293b;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .pagination button:hover:not(:disabled) {
+            background: rgba(59, 130, 246, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .pagination button.active {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Theme toggle */
+        .theme-toggle {
+            position: fixed;
             top: 20px;
             right: 20px;
+            z-index: 1001;
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
             display: flex;
             align-items: center;
-            gap: 8px;
-            background: rgba(16, 185, 129, 0.2);
-            padding: 8px 16px;
-            border-radius: 20px;
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            font-size: 14px;
-            color: #10b981;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
         }
 
-        .security-badge i {
-            animation: spin 2s linear infinite;
+        body.light-theme .theme-toggle {
+            background: rgba(255, 255, 255, 0.9);
         }
 
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        .theme-toggle:hover {
+            transform: scale(1.1);
         }
 
-        .loading-spinner {
+        /* Loading spinner */
+        .spinner {
             display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
             border-radius: 50%;
             border-top-color: white;
             animation: spin 1s ease-in-out infinite;
         }
 
-        .key-history {
-            margin-top: 20px;
-            padding: 16px;
-            background: rgba(15, 23, 42, 0.6);
-            border-radius: 8px;
-            max-height: 300px;
-            overflow-y: auto;
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
-        .key-history-item {
-            padding: 8px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 12px;
-            color: #94a3b8;
-        }
-
-        .key-history-item:last-child {
-            border-bottom: none;
-        }
-
-        .verification-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 10001;
-        }
-
-        .verification-content {
-            background: rgba(30, 41, 59, 0.95);
-            padding: 30px;
-            border-radius: 12px;
-            max-width: 400px;
-            width: 90%;
-            text-align: center;
-        }
-
-        .captcha-container {
+        /* Alert box */
+        .alert-box {
+            background: rgba(251, 191, 36, 0.2);
+            border-left: 4px solid #f59e0b;
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 16px;
             display: flex;
-            justify-content: center;
+            align-items: flex-start;
+        }
+
+        body.light-theme .alert-box {
+            background: rgba(251, 191, 36, 0.1);
+        }
+
+        .alert-box i {
+            margin-right: 12px;
+            color: #f59e0b;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .alert-box p {
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .alert-box ul {
+            margin: 8px 0 0 24px;
+            padding: 0;
+        }
+
+        .alert-box li {
+            margin-bottom: 4px;
+        }
+
+        /* Domain tag */
+        .domain-tag {
+            display: inline-flex;
             align-items: center;
-            margin: 20px 0;
-            gap: 10px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-right: 8px;
+            margin-bottom: 8px;
         }
 
-        .captcha-input {
-            background: rgba(15, 23, 42, 0.8);
-            border: 1px solid rgba(59, 130, 246, 0.5);
-            border-radius: 6px;
-            padding: 8px 12px;
-            color: white;
-            width: 100px;
-            text-align: center;
-            font-size: 18px;
-            letter-spacing: 2px;
+        .domain-tag.gmail {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
         }
 
-        .captcha-refresh {
+        body.light-theme .domain-tag.gmail {
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .domain-tag.googlemail {
             background: rgba(59, 130, 246, 0.2);
-            border: 1px solid rgba(59, 130, 246, 0.5);
-            border-radius: 6px;
-            padding: 8px;
+            color: #3b82f6;
+        }
+
+        body.light-theme .domain-tag.googlemail {
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .domain-tag.custom {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        body.light-theme .domain-tag.custom {
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .domain-tag i {
+            margin-right: 6px;
+        }
+
+        /* Cancel button */
+        .cancel-button {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: rgba(239, 68, 68, 0.8);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
             transition: all 0.3s ease;
+            z-index: 20;
         }
 
-        .captcha-refresh:hover {
-            background: rgba(59, 130, 246, 0.3);
+        .cancel-button:hover {
+            background: rgba(239, 68, 68, 1);
+            transform: scale(1.1);
+        }
+
+        /* Tab styles */
+        .tab-btn {
+            transition: all 0.3s ease;
+        }
+        
+        .tab-btn:hover {
+            background-color: rgba(139, 92, 246, 0.1);
+        }
+        
+        .tab-btn.active {
+            color: #8b5cf6;
+            border-bottom: 2px solid #8b5cf6;
         }
     </style>
 </head>
-<body class="flex items-center justify-center p-4 min-h-screen">
-    <!-- Anti-debug overlay -->
-    <div id="antiDebug" class="anti-debug">
-        <div class="anti-debug-content">
-            <i class="fas fa-shield-alt text-red-500 text-5xl mb-4"></i>
-            <h2 class="text-2xl font-bold mb-2 text-red-400">Phát hiện không an toàn</h2>
-            <p class="text-gray-300 mb-4">Hệ thống phát hiện có thể có hành vi không an toàn.</p>
-            <p class="text-sm text-gray-500 mb-6">Nếu bạn không mở DevTools, vui lòng nhấn "Bỏ qua" để tiếp tục.</p>
-            <div class="flex justify-center gap-4">
-                <button onclick="ignoreWarning()" class="btn">
-                    <i class="fas fa-check"></i> Bỏ qua
-                </button>
-                <button onclick="location.reload()" class="btn" style="background: linear-gradient(135deg, #6b7280, #4b5563);">
-                    <i class="fas fa-redo"></i> Làm mới
-                </button>
-            </div>
-        </div>
+<body class="dark-theme">
+    <!-- Theme toggle -->
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon" id="themeIcon"></i>
     </div>
 
-    <!-- Blocked overlay -->
-    <div id="blockedOverlay" class="blocked-overlay">
-        <div class="blocked-content">
-            <i class="fas fa-ban text-red-500 text-5xl mb-4"></i>
-            <h2 class="text-2xl font-bold mb-2 text-red-400">Truy cập bị từ chối</h2>
-            <p class="text-gray-300 mb-4">Bạn đã vượt quá giới hạn số lần lấy key mỗi ngày.</p>
-            <p class="text-sm text-gray-500">Vui lòng thử lại vào ngày mai.</p>
-            <div class="device-info mt-4">
-                <p><strong>Thông tin thiết bị:</strong></p>
-                <p id="deviceInfo"></p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Verification modal -->
-    <div id="verificationModal" class="verification-modal">
-        <div class="verification-content">
-            <h3 class="text-xl font-bold mb-4">Xác minh người dùng</h3>
-            <p class="text-gray-300 mb-4">Vui lòng nhập mã xác minh để tiếp tục</p>
-            <div class="captcha-container">
-                <div id="captchaDisplay" class="text-2xl font-mono tracking-wider"></div>
-                <button onclick="generateCaptcha()" class="captcha-refresh">
-                    <i class="fas fa-sync-alt"></i>
-                </button>
-            </div>
-            <input type="text" id="captchaInput" class="captcha-input" placeholder="Nhập mã">
-            <div class="mt-6 flex justify-center gap-4">
-                <button onclick="verifyCaptcha()" class="btn">
-                    <i class="fas fa-check"></i> Xác minh
-                </button>
-                <button onclick="closeVerification()" class="btn" style="background: linear-gradient(135deg, #6b7280, #4b5563);">
-                    <i class="fas fa-times"></i> Hủy
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <div class="card max-w-3xl w-full p-8 relative">
-        <!-- Security badge -->
-        <div class="security-badge">
-            <i class="fas fa-lock"></i>
-            <span>Bảo mật cao</span>
-        </div>
-
-        <!-- Fingerprint and rate limit indicators -->
-        <div class="fingerprint" id="fingerprintIndicator">
-            <i class="fas fa-fingerprint"></i>
-            <span>Đang lấy vân tay...</span>
-        </div>
-        <div class="rate-limit" id="rateLimitIndicator">
-            <i class="fas fa-chart-line"></i>
-            <span>Lần lấy: 0/5</span>
-        </div>
-
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold mb-2 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-                API Key Access
-            </h1>
-            <p class="text-gray-400">Nhận API Key của bạn với bảo mật cao cấp</p>
-        </div>
-
-        <div class="warning-box">
-            <div class="flex items-start">
-                <i class="fas fa-exclamation-triangle text-red-400 mr-3 mt-1"></i>
-                <div>
-                    <p class="font-semibold mb-1">Quy định sử dụng:</p>
-                    <ul class="text-sm text-gray-300 space-y-1">
-                        <li>• API Key chỉ có hiệu lực trong <strong>2 giờ</strong></li>
-                        <li>• Không sử dụng VPN hoặc Proxy để truy cập</li>
-                        <li>• Mỗi thiết bị chỉ nhận được <strong>5 key mỗi ngày</strong></li>
-                        <li>• Key hết hạn sẽ tự động đóng</li>
-                        <li>• Không được mở DevTools</li>
-                        <li>• Yêu cầu xác minh CAPTCHA sau mỗi 3 lần lấy key</li>
-                    </ul>
+    <div class="min-h-screen flex items-center justify-center p-4">
+        <div class="card p-8 w-full relative">
+            <!-- Cancel button -->
+            <button id="cancelButton" class="cancel-button hidden" onclick="cancelGeneration()">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center">
+                    <div class="logo text-4xl mr-3">📧</div>
+                    <h1 class="text-3xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                        Tạo Email Ảo
+                    </h1>
                 </div>
-            </div>
-        </div>
-
-        <div id="keyContainer" class="mb-6">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-semibold">API Keys của bạn</h2>
-                <div class="countdown">
-                    <i class="fas fa-clock"></i>
-                    <span id="countdown">00:00:00</span>
+                <div class="text-sm text-gray-400">
+                    Made with by khangdevxcoder
                 </div>
             </div>
             
-            <div id="keyList" class="space-y-3">
-                <!-- Keys sẽ được hiển thị ở đây -->
+            <!-- Hiển thị giờ VN -->
+            <div class="text-center mb-4">
+                <span id="vnTime" class="text-sm text-gray-400"></span>
             </div>
-
-            <div id="keyHistory" class="key-history" style="display: none;">
-                <h3 class="text-lg font-medium mb-2">Lịch sử sử dụng</h3>
-                <div id="historyList"></div>
+            
+            <div class="mb-6">
+                <label for="realEmail" class="block text-sm font-medium text-gray-300 mb-2">Nhập Gmail thật</label>
+                <input type="email" id="realEmail" placeholder="example@gmail.com" 
+                       class="p-3 w-full bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all text-white placeholder-gray-400">
             </div>
-        </div>
-
-        <div class="text-center">
-            <button id="refreshButton" class="btn" onclick="requestNewKey()">
-                <i class="fas fa-sync-alt"></i>
-                <span>Lấy API Key</span>
+            
+            <!-- Hướng dẫn sử dụng -->
+            <div class="alert-box mt-4">
+                <i class="fas fa-info-circle"></i>
+                <div>
+                    <p><strong>📖 Hướng dẫn sử dụng:</strong></p>
+                    <ul class="list-disc list-inside text-sm">
+                        <li>Nếu bạn nhập <strong>Gmail thật</strong> (ví dụ: <code>abc@gmail.com</code>):  
+                            Các alias như <code>a.bc@gmail.com</code>, <code>ab.c@gmail.com</code>, <code>abc+1@gmail.com</code>…  
+                            <u>đều sẽ gửi mail về cùng inbox</u> của địa chỉ gốc <code>abc@gmail.com</code>.
+                        </li>
+                        <li>Nếu bạn nhập <strong>domain custom</strong> (ví dụ: <code>@mydomain.com</code>):  
+                            Các alias chỉ mang tính <u>demo dạng text</u>, không dùng để nhận mail, trừ khi bạn sở hữu domain và đã cấu hình email cho domain đó.</li>
+                        <li>Bạn có thể sao chép hoặc xuất toàn bộ danh sách alias ra file TXT/CSV để sử dụng.</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-300 mb-2">Tùy chọn tạo email</label>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="flex items-center">
+                            <input type="checkbox" id="includeGooglemail" class="mr-2 h-4 w-4 text-purple-600 focus:ring-purple-500 border-slate-600 rounded bg-slate-800">
+                            <span class="text-sm text-gray-300">Tạo thêm email với @googlemail.com</span>
+                        </label>
+                    </div>
+                    <div>
+                        <label class="flex items-center">
+                            <input type="checkbox" id="includePlus" class="mr-2 h-4 w-4 text-purple-600 focus:ring-purple-500 border-slate-600 rounded bg-slate-800">
+                            <span class="text-sm text-gray-300">Bao gồm biến thể với ký tự +</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-300 mb-2">Giới hạn số lượng email mỗi trang</label>
+                <div class="flex items-center">
+                    <input type="range" id="emailLimit" min="10" max="100" value="50" 
+                           class="flex-grow h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer">
+                    <span id="limitValue" class="ml-3 text-sm text-gray-300 w-16">50</span>
+                </div>
+            </div>
+            
+            <div class="mb-6">
+                <div class="flex justify-between items-center mb-2">
+                    <label class="block text-sm font-medium text-gray-300">Domain (chỉ mang tính demo)</label>
+                    <div class="domain-tag gmail">
+                        <i class="fas fa-check-circle"></i>
+                        <span>@gmail.com</span>
+                    </div>
+                </div>
+                
+                <div class="flex gap-2 mb-2">
+                    <input type="text" id="customDomain" placeholder="custom.com" 
+                           class="flex-grow p-3 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all text-white placeholder-gray-400">
+                    <button onclick="addCustomDomain()" class="btn bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-lg">
+                        Thêm
+                    </button>
+                </div>
+                
+                <div id="domainList" class="flex flex-wrap gap-2"></div>
+                
+                <div class="alert-box mt-2">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p>Lưu ý: Alias với domain custom chỉ là text, không dùng để nhận mail trừ khi bạn sở hữu domain đó.</p>
+                </div>
+            </div>
+            
+            <button onclick="generateEmails()" id="generateButton" class="w-full btn bg-gradient-to-r from-blue-500 to-purple-600 text-white p-3 rounded-lg font-semibold mb-4">
+                <i class="fas fa-magic mr-2"></i>Tạo Ngay
             </button>
-        </div>
-
-        <div class="mt-8 text-center text-sm text-gray-500">
-            <p>Mỗi key chỉ có hiệu lực trong 2 giờ. Key sẽ tự động đóng khi hết hạn.</p>
-            <p class="mt-2">Bạn đã lấy: <span id="dailyCount">0</span>/5 key hôm nay</p>
+            
+            <div class="mb-4 hidden" id="progressContainer">
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-sm text-gray-300">Đang tạo email...</span>
+                    <span id="progressText" class="text-sm text-gray-300">0%</span>
+                </div>
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            
+            <div class="mb-4 flex flex-wrap justify-between items-center gap-2">
+                <div class="flex items-center">
+                    <p id="emailCount" class="text-sm text-gray-300">Số email ảo: 0</p>
+                    <div class="dropdown ml-2">
+                        <button id="copyExportButton" class="btn bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-lg flex items-center">
+                            <i class="fas fa-copy mr-1"></i>
+                            <span>Thao tác</span>
+                            <i class="fas fa-chevron-down ml-2"></i>
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="#" onclick="copyAllEmails()"><i class="fas fa-copy mr-2"></i>Sao chép toàn bộ</a>
+                            <a href="#" onclick="exportEmails('txt')"><i class="fas fa-file-alt mr-2"></i>Xuất TXT</a>
+                            <a href="#" onclick="exportEmails('csv')"><i class="fas fa-file-csv mr-2"></i>Xuất CSV</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <button id="previousPage" class="btn bg-gradient-to-r from-gray-600 to-gray-700 text-white px-3 py-1 rounded-lg text-sm hidden">
+                        <i class="fas fa-chevron-left mr-1"></i>Trước
+                    </button>
+                    <span id="pageInfo" class="text-sm text-gray-300"></span>
+                    <button id="nextPage" class="btn bg-gradient-to-r from-gray-600 to-gray-700 text-white px-3 py-1 rounded-lg text-sm hidden">
+                        <i class="fas fa-chevron-right mr-1"></i>Sau
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Tabs phân loại -->
+            <div class="mb-4">
+                <div class="flex border-b border-slate-700 mb-2">
+                    <button class="tab-btn px-4 py-2 font-medium text-purple-500 border-b-2 border-purple-500 active" data-tab="all">
+                        Tất cả
+                    </button>
+                    <button class="tab-btn px-4 py-2 font-medium text-gray-400 hover:text-gray-300" data-tab="dots">
+                        Biến thể dấu chấm
+                    </button>
+                    <button class="tab-btn px-4 py-2 font-medium text-gray-400 hover:text-gray-300" data-tab="plus">
+                        Biến thể dấu cộng
+                    </button>
+                </div>
+                <div class="search-box">
+                    <input type="text" id="searchBox" placeholder="Tìm kiếm email..." 
+                           onkeyup="filterEmails()" 
+                           class="w-full p-3 pl-10 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all text-white placeholder-gray-400">
+                </div>
+            </div>
+            
+            <div id="emailList" class="email-grid custom-scrollbar max-h-96 overflow-y-auto"></div>
+            
+            <div id="paginationContainer" class="pagination hidden"></div>
         </div>
     </div>
 
     <!-- Toast notification -->
     <div id="toast" class="toast">
-        <i class="fas fa-info-circle"></i>
-        <span id="toastMessage">Thông báo</span>
+        <i class="fas fa-check-circle mr-2"></i>
+        <span id="toastMessage">Đã sao chép!</span>
     </div>
 
     <script>
-        // API Keys mới
-        const apiKeys = [
-            "8b9644ac0b5300e0bbd0d65f83f50b8481cfc474ef396ce334504c4acbf20d54",
-            "c07312c66e76df192ded9bb35fa4a0b30950a9202cc1321fc6ac0673d9a298b3",
-            "df8366eff6c7df65a977ac381b4975f7e2330b659cd7b230f2935a7b6d1ce3d2",
-            "54047eee29b0a3fd5b4af5daf06c4ea309fb1a9533edc301961abd768fbbd79d",
-            "add2a1d2cdc7b508e326d30b0bf9c33ab23a9c7359b36c2433087a029b773a86",
-            "8d26f18557b0deb433a10c32dbcf6f431d1ea1306eb1b2f0dbea421bf68f65fe",
-            "e5aea2bd18d64d25f95f0c3800d0321eb805a6c5c78be1f7e4ab420c3bd13224",
-            "d576ba4f174e2d134b46c99cd0e1fd3b3adad04c88fe4124e438139e24a5c21a",
-            "3eebb5fd765d1df9ff80a4bf38e207ad1d54e65a9a012c921415cb67b8dd222d",
-            "fb0896d147c114b43a29db178e62239e8752c4c4de44d09e53857bb656f9f57b",
-            "5be85e5ba9e09fedd647563f889046436fe72019ae958665042b1de8ce52305b",
-            "77b1e372d65ac0b24a9942917c4331125ef2257b8465f9aab53a153f9f2222f3",
-            "f086d8cb1f5321b4f53c0d362062aae59012658df58149944cf72a1ba3a1cf24",
-            "fa83ae341211ff7b4dc0ca0fbe37b37325f8045d998e461958909a208ee90292",
-            "d2e0bf9074e81d42d805edc5ff8694101ddb51126b7915e62dd671d05437347f",
-            "e21f89a27a8a30d5de0987136e13984f25a60530cf03acd4f8664dc0abcbff53",
-            "584680b109c8b289a6114fa67d5271aead7b00f28472e1123f1fade5f43e5656",
-            "a7ca239fd72505509155f40bc6c85273c5e6e5741b8237db1207c4e480ece317",
-            "6a741f52b71535dbcfb275c5d1af69b49ca3e7f9411aa193dc0eb4e466321841",
-            "ca845c83d4be7c2b5ca973a889a1f50b3a57fa249329683759407ddffbc1edcf",
-            "b46db6047dfc9565ca7a444cd5702d0cd0437679ad2865eacb035cb1b4d35824",
-            "b2f9661e8bdbbf5a8eb38623537e24538e3a676d309e8617afc7e66984276e2f",
-            "39772bef130e7299d97f8c947965c7bd538075325152b4f7cf53d6efb5b21898",
-            "716ddddec1bc718ebfc6ca9166cb86965cd8d5aefb920463e0cbb97770dc2b69",
-            "a3c26a36a66b93ca562c676e92acdc40f78abf7140559a620b45d69f50dea335",
-            "3fd190165b569a86414dfb549921c92d770a254529ddf6ba0ff779e14a2a60d0",
-            "6176fca7028069037d7965486eba90622ca94466c0fe73080244934d07ede402",
-            "9b78d6728810443757c5842d9137791700735d50102b45e09a07286c3ab4ae93",
-            "7c28935da677627eda2db25473b3f9cd689832bc0bf56c12902f1fc87a9484e7",
-            "211e5e70f4e708bbfe4022ac8c62ecc15803497c5a1ddcfdf2efd2af328d99a4",
-            "5647e96ccad35f35ff5bb4dfd1353048ac8fc7cec086c2f89ac75c77f4520e27",
-            "9df5c1ea0beae6594260edd2fda49695585207740b1daf7d62c75eed176a397d",
-            "5dc9f98517406ad33d3f6c808985c8dedf656ec30da6d3ae90157306c67ff503",
-            "d10ecb1915d9b2a69e23497b447fd518060fc9bb0d03bafdcb0ca19a4d20c621",
-            "ac8fed1e8d8c11da01a01ae55d771f21327c41712d6cb4acf05d15f1f74f260f",
-            "ad72573e5ecf072d65d9d679a498c83986f8895cfa22d92bb61b39eb842ff218",
-            "7e5dd3c23bc4e1d84bc979d85321751d5b2f2f9d07d847d46f9adb9763f51ecf",
-            "24b69816123ed38a909c5d688f99fd0a3ecfd53b45bc0ba5943ef1a7f0b16aeb",
-            "631efe5547d7108413b041a78c124d9b5b62f421ecc703910794c1a498173cbf",
-            "977d5f68bd71cdebf85d0fc9e5ad5aed37ccc33477fece9e80b28934498fd8ef",
-            "40094a8b82a730243dfce81b13747f51bd758e57e0955ae532a7a43a0c80d1ee",
-            "93c3f284b0e4bc3ef239b71cd0912ba65416ddaba3cb623d68d56b7c1b166ad3",
-            "7adfb6e38887934599014a67aedc9a9920a675ade53bb9952a8e7b21a62ad15a",
-            "b800bd6182895b5e9f24c8589e679d7714c8fed4514b8fce484f2570261dc477",
-            "cd4b36d07920efa40f645361e987167c6d71e04b8bcf3457f39b0798b0203828",
-            "0a41db67bad180fee3148e1a4d600518a07c0fec6c265bc6d7f0654c2e5c3508",
-            "4a3c5e59a696eae842259b6b01aef3217ff183597a4e6ebf2a13140de14fdf30",
-            "7f77360b16470825d22290ff2ff9cad859afddce37b9580a2eab0ee174865910",
-            "0caf314f99d822ef23033ced3af5998dd70ec529549447b3eb2cc273019a26ad",
-            "872b2c9bb49b6f492750f897f0b1f70f01edf5f75dd59f7a869befbf7a4d4077"
-        ];
-
-        // Khởi tạo các biến
-        let hasKey = false;
-        let countdownInterval;
-        let dailyCount = 0;
-        let deviceFingerprint = '';
-        let captchaCode = '';
-        let verificationAttempts = 0;
-        let devToolsDetected = false;
-        let warningIgnored = false;
-
-        // Lấy vân tay thiết bị
-        function generateFingerprint() {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            const txt = 'fingerprint';
-            
-            ctx.font = '14px Arial';
-            ctx.fillStyle = '#f60';
-            ctx.fillRect(125, 1, 62, 20);
-            ctx.fillStyle = '#069';
-            ctx.fillText(txt, 2, 15);
-            ctx.fillStyle = 'rgba(255, 0, 0, 0.5)';
-            ctx.fillText(txt, 4, 17);
-            
-            const fingerprint = canvas.toDataURL();
-            const hash = btoa(fingerprint);
-            
-            // Lấy thêm thông tin về thiết bị
-            const userAgent = navigator.userAgent;
-            const platform = navigator.platform;
-            const language = navigator.language;
-            const screenResolution = `${screen.width}x${screen.height}`;
-            const colorDepth = screen.colorDepth;
-            const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-            const hardwareConcurrency = navigator.hardwareConcurrency || 'unknown';
-            const deviceMemory = navigator.deviceMemory || 'unknown';
-            
-            // Kiểm tra có phải là proxy không
-            const isProxy = checkForProxy();
-            
-            deviceFingerprint = btoa(`${hash}-${userAgent}-${platform}-${language}-${screenResolution}-${colorDepth}-${timezone}-${hardwareConcurrency}-${deviceMemory}-${isProxy}`);
-            
-            document.getElementById('fingerprintIndicator').innerHTML = `
-                <i class="fas fa-fingerprint"></i>
-                <span>Vân tay: ${deviceFingerprint.substring(0, 20)}...</span>
-            `;
-            
-            document.getElementById('deviceInfo').innerHTML = `
-                <p>User Agent: ${userAgent.substring(0, 50)}...</p>
-                <p>Platform: ${platform}</p>
-                <p>Language: ${language}</p>
-                <p>Screen: ${screenResolution}</p>
-                <p>Color Depth: ${colorDepth}</p>
-                <p>Timezone: ${timezone}</p>
-                <p>Cores: ${hardwareConcurrency}</p>
-                <p>Memory: ${deviceMemory} GB</p>
-                <p>Proxy: ${isProxy ? 'Có' : 'Không'}</p>
-            `;
-            
-            return deviceFingerprint;
-        }
-
-        // Kiểm tra có phải là proxy không
-        function checkForProxy() {
-            // Kiểm tra các thuộc tính thường bị thay đổi bởi proxy
-            const suspiciousProperties = [
-                'webdriver', 'plugins', 'mimeTypes', 'languages', 
-                'connection', 'doNotTrack', 'cookieEnabled'
-            ];
-            
-            for (let prop of suspiciousProperties) {
-                if (navigator[prop] === undefined || navigator[prop] === null) {
-                    return true;
-                }
-            }
-            
-            // Kiểm tra có phải là headless browser không
-            if (navigator.webdriver) {
-                return true;
-            }
-            
-            // Kiểm tra các chỉ số screen
-            if (screen.availWidth === 0 || screen.availHeight === 0) {
-                return true;
-            }
-            
-            return false;
-        }
-
-        // Bỏ qua cảnh báo
-        function ignoreWarning() {
-            warningIgnored = true;
-            document.getElementById('antiDebug').style.display = 'none';
-            showToast('Cảnh báo đã được bỏ qua. Hệ thống sẽ tiếp tục giám sát.');
-        }
-
-        // Kiểm tra giới hạn hàng ngày
-        function checkDailyLimit() {
-            const today = new Date().toDateString();
-            const storedDate = sessionStorage.getItem('keyDate');
-            const storedCount = sessionStorage.getItem('keyCount');
-            
-            if (storedDate === today) {
-                dailyCount = parseInt(storedCount) || 0;
-            } else {
-                dailyCount = 0;
-                sessionStorage.setItem('keyDate', today);
-            }
-            
-            updateRateLimit();
-            
-            // Nếu đã vượt quá giới hạn, hiển thị overlay
-            if (dailyCount >= 5) {
-                document.getElementById('blockedOverlay').style.display = 'flex';
-                return true;
-            }
-            
-            return false;
-        }
-
-        // Cập nhật hiển thị giới hạn
-        function updateRateLimit() {
-            document.getElementById('rateLimitIndicator').innerHTML = `
-                <i class="fas fa-chart-line"></i>
-                <span>Lần lấy: ${dailyCount}/5</span>
-            `;
-            document.getElementById('dailyCount').textContent = dailyCount;
-        }
-
-        // Kiểm tra xem người dùng đã có key chưa
-        function checkUserKey() {
-            const userKey = sessionStorage.getItem('userApiKey');
-            const keyTime = sessionStorage.getItem('keyTime');
-            
-            if (userKey && keyTime) {
-                const elapsed = Date.now() - parseInt(keyTime);
-                if (elapsed < 7200000) { // 2 giờ = 7200000 ms
-                    hasKey = true;
-                    displayKey(userKey);
-                    startCountdown(parseInt(keyTime));
-                    
-                    // Hiển thị lịch sử
-                    showKeyHistory();
-                    return true;
-                } else {
-                    // Key đã hết hạn
-                    sessionStorage.removeItem('userApiKey');
-                    sessionStorage.removeItem('keyTime');
-                }
-            }
-            return false;
-        }
-
-        // Hiển thị key
-        function displayKey(key) {
-            const keyList = document.getElementById('keyList');
-            keyList.innerHTML = `
-                <div class="key-item">
-                    <div class="flex justify-between items-center mb-2">
-                        <span class="font-medium">API Key của bạn</span>
-                        <button onclick="copyKey('${key}')" class="text-blue-400 hover:text-blue-300 flex items-center gap-1">
-                            <i class="fas fa-copy"></i> Sao chép
-                        </button>
-                    </div>
-                    <div class="key-value">${key}</div>
-                    <div class="mt-2 text-xs text-gray-500">
-                        <i class="fas fa-info-circle mr-1"></i>
-                        Key sẽ tự động đóng khi hết hạn
-                    </div>
-                </div>
-            `;
-        }
-
-        // Sao chép key
-        function copyKey(key) {
-            navigator.clipboard.writeText(key).then(() => {
-                showToast('Đã sao chép key!');
-                
-                // Thêm vào lịch sử
-                addToHistory('Sao chép key');
-            });
-        }
-
-        // Thêm vào lịch sử
-        function addToHistory(action) {
-            const history = JSON.parse(sessionStorage.getItem('keyHistory') || '[]');
+        // Quản lý domain
+        let customDomains = [];
+        let isGenerating = false;
+        let generationCancelled = false;
+        let currentTab = 'all';
+        
+        // Debounce timer
+        let debounceTimer;
+        
+        // Cập nhật giờ Việt Nam
+        function updateVNTime() {
             const now = new Date();
-            history.unshift({
-                action: action,
-                time: now.toLocaleString('vi-VN'),
-                key: hasKey ? 'Có' : 'Không'
-            });
+            const options = {
+                timeZone: 'Asia/Ho_Chi_Minh',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            };
+            const timeString = now.toLocaleTimeString('vi-VN', options);
+            document.getElementById("vnTime").textContent = "⏰ Bây giờ: " + timeString + " (Giờ VN)";
+        }
+        
+        setInterval(updateVNTime, 1000);
+        updateVNTime();
+        
+        function addCustomDomain() {
+            const customDomainInput = document.getElementById('customDomain');
+            const domain = customDomainInput.value.trim();
             
-            // Giữ chỉ 10 bản ghi gần nhất
-            if (history.length > 10) {
-                history.pop();
-            }
-            
-            sessionStorage.setItem('keyHistory', JSON.stringify(history));
-            updateKeyHistory();
-        }
-
-        // Hiển thị lịch sử
-        function showKeyHistory() {
-            const history = JSON.parse(sessionStorage.getItem('keyHistory') || '[]');
-            if (history.length > 0) {
-                document.getElementById('keyHistory').style.display = 'block';
-                updateKeyHistory();
-            }
-        }
-
-        // Cập nhật lịch sử hiển thị
-        function updateKeyHistory() {
-            const history = JSON.parse(sessionStorage.getItem('keyHistory') || '[]');
-            const historyList = document.getElementById('historyList');
-            
-            historyList.innerHTML = history.map(item => `
-                <div class="key-history-item">
-                    <div class="flex justify-between">
-                        <span>${item.action}</span>
-                        <span>${item.time}</span>
-                    </div>
-                    <div class="text-xs text-gray-500 mt-1">Trạng thái: ${item.key}</div>
-                </div>
-            `).join('');
-        }
-
-        // Yêu cầu key mới
-        function requestNewKey() {
-            // Kiểm tra giới hạn hàng ngày
-            if (checkDailyLimit()) {
-                showToast('Bạn đã vượt quá giới hạn hôm nay!');
-                return;
-            }
-
-            // Kiểm tra xem người dùng đã có key chưa
-            if (hasKey) {
-                showToast('Bạn đã có API Key rồi!');
-                return;
-            }
-
-            // Kiểm tra xem có cần xác minh không
-            if (dailyCount > 0 && dailyCount % 3 === 0) {
-                showVerificationModal();
-                return;
-            }
-
-            // Nếu không cần xác minh, lấy key ngay
-            getNewKey();
-        }
-
-        // Hiển thị modal xác minh
-        function showVerificationModal() {
-            generateCaptcha();
-            document.getElementById('verificationModal').style.display = 'flex';
-        }
-
-        // Đóng modal xác minh
-        function closeVerification() {
-            document.getElementById('verificationModal').style.display = 'none';
-            document.getElementById('captchaInput').value = '';
-        }
-
-        // Tạo CAPTCHA
-        function generateCaptcha() {
-            const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            captchaCode = '';
-            for (let i = 0; i < 5; i++) {
-                captchaCode += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            document.getElementById('captchaDisplay').textContent = captchaCode;
-        }
-
-        // Xác minh CAPTCHA
-        function verifyCaptcha() {
-            const input = document.getElementById('captchaInput').value.toUpperCase();
-            
-            if (input === captchaCode) {
-                closeVerification();
-                getNewKey();
-                addToHistory('Lấy key mới (đã xác minh)');
-            } else {
-                verificationAttempts++;
-                
-                if (verificationAttempts >= 3) {
-                    showToast('Bạn đã nhập sai quá nhiều lần. Vui lòng thử lại sau 1 phút.');
-                    closeVerification();
-                    
-                    // Đặt thời gian chờ
-                    setTimeout(() => {
-                        verificationAttempts = 0;
-                    }, 60000);
-                } else {
-                    showToast(`Mã không đúng. Bạn còn ${3 - verificationAttempts} lần thử.`);
+            if (domain && !domain.startsWith('@')) {
+                const fullDomain = '@' + domain;
+                if (!customDomains.includes(fullDomain)) {
+                    customDomains.push(fullDomain);
+                    updateDomainList();
+                    customDomainInput.value = '';
+                    showToast('Đã thêm domain: ' + fullDomain);
                 }
             }
         }
-
-        // Lấy key mới
-        function getNewKey() {
-            // Hiển thị loading
-            const refreshButton = document.getElementById('refreshButton');
-            const originalContent = refreshButton.innerHTML;
-            refreshButton.innerHTML = '<span class="loading-spinner"></span> Đang xử lý...';
-            refreshButton.disabled = true;
-
-            // Mô phỏng thời gian xử lý
-            setTimeout(() => {
-                // Lấy key ngẫu nhiên từ danh sách
-                const randomIndex = Math.floor(Math.random() * apiKeys.length);
-                const newKey = apiKeys[randomIndex];
-                
-                // Lưu key và thời gian
-                sessionStorage.setItem('userApiKey', newKey);
-                sessionStorage.setItem('keyTime', Date.now().toString());
-                
-                // Cập nhật đếm
-                dailyCount++;
-                sessionStorage.setItem('keyCount', dailyCount.toString());
-                updateRateLimit();
-                
-                hasKey = true;
-                displayKey(newKey);
-                startCountdown(Date.now());
-                
-                showToast('Đã nhận được API Key mới!');
-                addToHistory('Lấy key mới');
-                
-                // Hiển thị lịch sử
-                showKeyHistory();
-                
-                // Khôi phục nút
-                refreshButton.innerHTML = originalContent;
-                refreshButton.disabled = false;
-            }, 1500);
-        }
-
-        // Bắt đầu đếm ngược
-        function startCountdown(keyTime) {
-            if (countdownInterval) clearInterval(countdownInterval);
+        
+        function updateDomainList() {
+            const domainList = document.getElementById('domainList');
+            domainList.innerHTML = '';
             
-            countdownInterval = setInterval(() => {
-                const elapsed = Date.now() - keyTime;
-                const remaining = Math.max(0, 7200000 - elapsed); // 2 giờ
-                
-                if (remaining === 0) {
-                    clearInterval(countdownInterval);
-                    sessionStorage.removeItem('userApiKey');
-                    sessionStorage.removeItem('keyTime');
-                    hasKey = false;
-                    document.getElementById('keyList').innerHTML = '<p class="text-gray-400">Key đã hết hạn</p>';
-                    showToast('API Key đã hết hạn!');
-                    addToHistory('Key hết hạn');
+            // Hiển thị @gmail.com
+            const gmailTag = document.createElement('div');
+            gmailTag.className = 'domain-tag gmail';
+            gmailTag.innerHTML = '<i class="fas fa-check-circle"></i><span>@gmail.com</span>';
+            domainList.appendChild(gmailTag);
+            
+            // Hiển thị @googlemail.com nếu được chọn
+            if (document.getElementById('includeGooglemail').checked) {
+                const googlemailTag = document.createElement('div');
+                googlemailTag.className = 'domain-tag googlemail';
+                googlemailTag.innerHTML = '<i class="fas fa-check-circle"></i><span>@googlemail.com</span>';
+                domainList.appendChild(googlemailTag);
+            }
+            
+            // Hiển thị custom domains
+            customDomains.forEach((domain, index) => {
+                const domainTag = document.createElement('div');
+                domainTag.className = 'domain-tag custom';
+                domainTag.innerHTML = `
+                    <span>${domain}</span>
+                    <button onclick="removeCustomDomain(${index})" class="ml-2 text-white hover:text-gray-200">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                domainList.appendChild(domainTag);
+            });
+        }
+        
+        function removeCustomDomain(index) {
+            customDomains.splice(index, 1);
+            updateDomainList();
+        }
+        
+        // Phân trang
+        let currentPage = 1;
+        let totalPages = 1;
+        let allEmails = [];
+        let filteredEmails = [];
+        
+        // Hủy quá trình tạo email
+        function cancelGeneration() {
+            generationCancelled = true;
+            document.getElementById('cancelButton').classList.add('hidden');
+            document.getElementById('generateButton').disabled = false;
+            showToast('Đã hủy quá trình tạo email');
+        }
+        
+        // Validate email
+        function validateEmail(email) {
+            const gmailRegex = /^[a-zA-Z0-9._%+-]+@(gmail\.com|googlemail\.com)$/;
+            const customDomainRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            return gmailRegex.test(email) || customDomainRegex.test(email);
+        }
+        
+        // Sanitize input
+        function sanitizeInput(text) {
+            return text.replace(/[<>]/g, '');
+        }
+        
+        // Generator function để tạo email
+        function* generateEmailVariations(localPart, includePlus, domains) {
+            const chars = localPart.split('');
+            const maxEmails = 5000;
+            let count = 0;
+            
+            // Tạo biến thể dấu chấm
+            function* generateDotVariations(current, pos, domain) {
+                if (pos === chars.length) {
+                    yield current + domain;
+                    count++;
                     return;
                 }
                 
-                const hours = Math.floor(remaining / 3600000);
-                const minutes = Math.floor((remaining % 3600000) / 60000);
-                const seconds = Math.floor((remaining % 60000) / 1000);
+                yield* generateDotVariations(current + chars[pos], pos + 1, domain);
                 
-                document.getElementById('countdown').textContent = 
-                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            }, 1000);
+                if (pos < chars.length - 1) {
+                    yield* generateDotVariations(current + chars[pos] + '.', pos + 1, domain);
+                }
+            }
+            
+            // Tạo biến thể dấu cộng
+            function* generatePlusVariations(current, pos, domain) {
+                if (pos === chars.length) {
+                    yield current + domain;
+                    count++;
+                    return;
+                }
+                
+                yield* generatePlusVariations(current + chars[pos], pos + 1, domain);
+                
+                if (pos < chars.length - 1) {
+                    yield* generatePlusVariations(current + chars[pos] + '+', pos + 1, domain);
+                }
+            }
+            
+            // Tạo biến thể kết hợp
+            function* generateCombinedVariations(current, pos, domain) {
+                if (pos === chars.length) {
+                    yield current + domain;
+                    count++;
+                    return;
+                }
+                
+                // Không thêm ký tự đặc biệt
+                yield* generateCombinedVariations(current + chars[pos], pos + 1, domain);
+                
+                // Thêm dấu chấm
+                if (pos < chars.length - 1) {
+                    yield* generateCombinedVariations(current + chars[pos] + '.', pos + 1, domain);
+                }
+                
+                // Thêm dấu cộng
+                if (pos < chars.length - 1) {
+                    yield* generateCombinedVariations(current + chars[pos] + '+', pos + 1, domain);
+                }
+            }
+            
+            // Lặp qua tất cả domains đã chọn
+            for (const domain of domains) {
+                if (includePlus) {
+                    yield* generateCombinedVariations('', 0, domain);
+                } else {
+                    yield* generateDotVariations('', 0, domain);
+                }
+                
+                // Kiểm tra giới hạn
+                if (count >= maxEmails) break;
+            }
         }
-
-        // Hiển thị toast
+        
+        // Tạo email ảo
+        async function generateEmails() {
+            if (isGenerating) return;
+            
+            isGenerating = true;
+            generationCancelled = false;
+            
+            const realEmail = document.getElementById('realEmail').value.trim();
+            const includeGooglemail = document.getElementById('includeGooglemail').checked;
+            const includePlus = document.getElementById('includePlus').checked;
+            const limit = parseInt(document.getElementById('emailLimit').value);
+            const emailList = document.getElementById('emailList');
+            const emailCount = document.getElementById('emailCount');
+            const generateButton = document.getElementById('generateButton');
+            const progressBar = document.getElementById('progressBar');
+            const progressContainer = document.getElementById('progressContainer');
+            const cancelButton = document.getElementById('cancelButton');
+            
+            emailList.innerHTML = '';
+            progressContainer.classList.remove('hidden');
+            progressBar.classList.remove('loading');
+            progressBar.style.transform = 'scaleX(0)';
+            document.getElementById('progressText').textContent = '0%';
+            cancelButton.classList.remove('hidden');
+            
+            // Thêm spinner vào nút
+            generateButton.innerHTML = '<div class="spinner mr-2"></div>Đang tạo...';
+            generateButton.disabled = true;
+            
+            // Validate email
+            if (!validateEmail(realEmail)) {
+                emailList.innerHTML = '<div class="email-item p-3 text-red-400 text-sm col-span-full">Vui lòng nhập địa chỉ email hợp lệ!</div>';
+                emailCount.textContent = 'Số email ảo: 0';
+                progressContainer.classList.add('hidden');
+                generateButton.innerHTML = '<i class="fas fa-magic mr-2"></i>Tạo Ngay';
+                generateButton.disabled = false;
+                cancelButton.classList.add('hidden');
+                isGenerating = false;
+                return;
+            }
+            
+            const localPart = realEmail.split('@')[0].replace(/\./g, '');
+            if (localPart.length < 2) {
+                emailList.innerHTML = '<div class="email-item p-3 text-red-400 text-sm col-span-full">Phần tên email quá ngắn để tạo biến thể!</div>';
+                emailCount.textContent = 'Số email ảo: 0';
+                progressContainer.classList.add('hidden');
+                generateButton.innerHTML = '<i class="fas fa-magic mr-2"></i>Tạo Ngay';
+                generateButton.disabled = false;
+                cancelButton.classList.add('hidden');
+                isGenerating = false;
+                return;
+            }
+            
+            // Build selectedDomains từ các tùy chọn
+            let selectedDomains = ['@gmail.com'];
+            if (includeGooglemail) {
+                selectedDomains.push('@googlemail.com');
+            }
+            selectedDomains = selectedDomains.concat(customDomains);
+            
+            // Sử dụng generator để tạo email từng phần
+            const emailGenerator = generateEmailVariations(localPart, includePlus, selectedDomains);
+            allEmails = [];
+            let batch = [];
+            let totalGenerated = 0;
+            
+            for (const email of emailGenerator) {
+                batch.push(email);
+                totalGenerated++;
+                
+                // Cập nhật tiến độ mỗi 100 email
+                if (totalGenerated % 100 === 0) {
+                    const progress = Math.min(100, Math.round((totalGenerated / 5000) * 100));
+                    document.getElementById('progressText').textContent = `${progress}% (${totalGenerated}/5000)`;
+                    progressBar.style.transform = `scaleX(${progress / 100})`;
+                    
+                    // Cập nhật số email đã tạo
+                    emailCount.textContent = `Số email ảo: ${totalGenerated}`;
+                    
+                    // Cho phép UI cập nhật
+                    await new Promise(resolve => setTimeout(resolve, 0));
+                }
+                
+                // Nếu đã đủ số lượng hiển thị, tạm dừng
+                if (batch.length >= 100 && totalGenerated % 100 === 0) {
+                    allEmails.push(...batch);
+                    batch = [];
+                    filterEmails();
+                    displayEmails();
+                }
+                
+                // Kiểm tra hủy
+                if (generationCancelled) {
+                    progressContainer.classList.add('hidden');
+                    generateButton.innerHTML = '<i class="fas fa-magic mr-2"></i>Tạo Ngay';
+                    generateButton.disabled = false;
+                    cancelButton.classList.add('hidden');
+                    isGenerating = false;
+                    return;
+                }
+            }
+            
+            // Thêm phần còn lại
+            if (batch.length > 0) {
+                allEmails.push(...batch);
+                filterEmails();
+                displayEmails();
+            }
+            
+            // Cập nhật UI
+            progressContainer.classList.add('hidden');
+            generateButton.innerHTML = '<i class="fas fa-magic mr-2"></i>Tạo Ngay';
+            generateButton.disabled = false;
+            cancelButton.classList.add('hidden');
+            isGenerating = false;
+            
+            showToast(`Hoàn thành! Đã tạo ${allEmails.length} email`);
+        }
+        
+        // Lọc email với debounce
+        function filterEmails() {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                const searchTerm = document.getElementById('searchBox').value.toLowerCase();
+                
+                // Lọc theo tab hiện tại
+                if (currentTab === 'all') {
+                    filteredEmails = allEmails.filter(email => 
+                        email.toLowerCase().includes(searchTerm)
+                    );
+                } else if (currentTab === 'dots') {
+                    filteredEmails = allEmails.filter(email => 
+                        email.toLowerCase().includes(searchTerm) && 
+                        email.includes('.') && 
+                        !email.includes('+')
+                    );
+                } else if (currentTab === 'plus') {
+                    filteredEmails = allEmails.filter(email => 
+                        email.toLowerCase().includes(searchTerm) && 
+                        email.includes('+')
+                    );
+                }
+                
+                // Cập nhật phân trang
+                const limit = parseInt(document.getElementById('emailLimit').value);
+                totalPages = Math.ceil(filteredEmails.length / limit);
+                currentPage = 1;
+                
+                // Hiển thị email
+                displayEmails();
+            }, 300);
+        }
+        
+        // Hiển thị email theo trang
+        function displayEmails() {
+            const emailList = document.getElementById('emailList');
+            const limit = parseInt(document.getElementById('emailLimit').value);
+            const startIndex = (currentPage - 1) * limit;
+            const endIndex = startIndex + limit;
+            const emailsToShow = filteredEmails.slice(startIndex, endIndex);
+            
+            emailList.innerHTML = '';
+            
+            emailsToShow.forEach((email, index) => {
+                const emailItem = document.createElement('div');
+                emailItem.className = 'email-item p-3';
+                emailItem.textContent = email;
+                emailItem.onclick = () => copyToClipboard(email, emailItem);
+                
+                emailList.appendChild(emailItem);
+                
+                // Delay animation
+                setTimeout(() => {
+                    emailItem.style.animationDelay = `${index * 0.05}s`;
+                }, 10);
+            });
+            
+            // Cập nhật thông tin phân trang
+            updatePagination();
+        }
+        
+        // Cập nhật phân trang
+        function updatePagination() {
+            const pageInfo = document.getElementById('pageInfo');
+            const previousButton = document.getElementById('previousPage');
+            const nextButton = document.getElementById('nextPage');
+            const paginationContainer = document.getElementById('paginationContainer');
+            
+            if (totalPages <= 1) {
+                pageInfo.textContent = '';
+                previousButton.classList.add('hidden');
+                nextButton.classList.add('hidden');
+                paginationContainer.classList.add('hidden');
+                return;
+            }
+            
+            pageInfo.textContent = `Trang ${currentPage} / ${totalPages}`;
+            previousButton.classList.remove('hidden');
+            nextButton.classList.remove('hidden');
+            paginationContainer.classList.remove('hidden');
+            
+            previousButton.disabled = currentPage === 1;
+            nextButton.disabled = currentPage === totalPages;
+        }
+        
+        // Xử lý phân trang
+        document.getElementById('previousPage').addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                displayEmails();
+            }
+        });
+        
+        document.getElementById('nextPage').addEventListener('click', () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                displayEmails();
+            }
+        });
+        
+        // Sao chép vào clipboard với hiệu ứng inline
+        function copyToClipboard(text, element) {
+            navigator.clipboard.writeText(text).then(() => {
+                // Hiển thị toast
+                showToast(`Đã sao chép: ${text}`);
+                
+                // Hiển thị indicator inline
+                const indicator = document.createElement('div');
+                indicator.className = 'copied-indicator';
+                indicator.textContent = 'Đã sao chép!';
+                element.appendChild(indicator);
+                
+                // Trigger animation
+                setTimeout(() => {
+                    indicator.classList.add('show');
+                }, 10);
+                
+                // Ẩn indicator sau 2 giây
+                setTimeout(() => {
+                    indicator.classList.remove('show');
+                    setTimeout(() => {
+                        element.removeChild(indicator);
+                    }, 300);
+                }, 2000);
+            }).catch(err => {
+                console.error('Lỗi khi sao chép: ', err);
+                showToast('Lỗi khi sao chép, vui lòng thử lại!');
+            });
+        }
+        
+        // Sao chép tất cả email
+        function copyAllEmails() {
+            if (filteredEmails.length > 1000) {
+                if (!confirm(`Bạn đang cố gắng sao chép ${filteredEmails.length} email. Điều này có thể làm chậm trình duyệt. Bạn có muốn tiếp tục?`)) {
+                    return;
+                }
+            }
+            
+            const textToCopy = filteredEmails.join('\n');
+            
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                showToast(`Đã sao chép ${filteredEmails.length} email!`);
+            }).catch(err => {
+                console.error('Lỗi khi sao chép toàn bộ: ', err);
+                showToast('Lỗi khi sao chép toàn bộ, vui lòng thử lại!');
+            });
+        }
+        
+        // Export email
+        function exportEmails(format) {
+            if (filteredEmails.length === 0) {
+                showToast('Không có email để xuất!');
+                return;
+            }
+            
+            // Sanitize từng email
+            const sanitizedEmails = filteredEmails.map(email => sanitizeInput(email));
+            
+            if (format === 'txt') {
+                const content = sanitizedEmails.join('\n');
+                downloadFile(content, 'email-aliases.txt', 'text/plain');
+            } else if (format === 'csv') {
+                const content = 'Email\n' + sanitizedEmails.join('\n');
+                downloadFile(content, 'email-aliases.csv', 'text/csv');
+            }
+        }
+        
+        // Tải file
+        function downloadFile(content, filename, contentType) {
+            const blob = new Blob([content], { type: contentType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast(`Đã tải xuống: ${filename}`);
+        }
+        
+        // Cập nhật domain list khi thay đổi checkbox
+        document.getElementById('includeGooglemail').addEventListener('change', updateDomainList);
+        
+        // Cập nhật giá trị giới hạn
+        const emailLimit = document.getElementById('emailLimit');
+        const limitValue = document.getElementById('limitValue');
+        emailLimit.addEventListener('input', () => {
+            limitValue.textContent = emailLimit.value;
+        });
+        
+        // Hiển thị toast notification
         function showToast(message) {
             const toast = document.getElementById('toast');
             const toastMessage = document.getElementById('toastMessage');
@@ -920,99 +1185,74 @@
                 toast.classList.remove('show');
             }, 3000);
         }
-
-        // Cải thiện kiểm tra DevTools - Giảm false positive
-        function checkDevTools() {
-            // Sử dụng nhiều phương pháp để phát hiện Dev Tools nhưng giảm nhạy cảm
+        
+        // Theme toggle
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('themeIcon');
             
-            // Phương pháp 1: Kiểm tra kích thước cửa sổ với ngưỡng cao hơn
-            const threshold = 400; // Tăng ngưỡng từ 200 lên 400
-            
-            setInterval(() => {
-                if (window.outerHeight - window.innerHeight > threshold || 
-                    window.outerWidth - window.innerWidth > threshold) {
-                    if (!devToolsDetected) {
-                        devToolsDetected = true;
-                        showAntiDebug();
-                    }
-                }
-            }, 3000); // Giảm tần suất kiểm tra từ 1000ms lên 3000ms
-            
-            // Phương pháp 2: Sử dụng console.log trick thay vì ghi đè console
-            const testConsole = () => {
-                const start = performance.now();
-                console.log('%c', 'color: #fff; background: #000; font-size: 100px; padding: 50px;');
-                const end = performance.now();
-                
-                // Nếu DevTools mở, console.log sẽ chậm hơn
-                if (end - start > 50 && !devToolsDetected) {
-                    devToolsDetected = true;
-                    showAntiDebug();
-                }
-            };
-            
-            // Chạy console.log trick mỗi 5 giây
-            setInterval(testConsole, 5000);
-            
-            // Phương pháp 3: Kiểm tra performance API
-            const perfEntries = performance.getEntriesByType('navigation');
-            if (perfEntries.length > 0) {
-                const navEntry = perfEntries[0];
-                if (navEntry.name.includes('about:blank')) {
-                    devToolsDetected = true;
-                    showAntiDebug();
-                }
+            if (body.classList.contains('dark-theme')) {
+                body.classList.remove('dark-theme');
+                body.classList.add('light-theme');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.classList.remove('light-theme');
+                body.classList.add('dark-theme');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'dark');
             }
         }
-
-        // Hiển thị anti-debug
-        function showAntiDebug() {
-            if (!warningIgnored && !document.getElementById('antiDebug').style.display || 
-                document.getElementById('antiDebug').style.display === 'none') {
-                document.getElementById('antiDebug').style.display = 'flex';
-                
-                // Thống kê
-                addToHistory('Phát hiện không an toàn');
+        
+        // Load saved theme
+        window.addEventListener('load', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            if (savedTheme === 'light') {
+                toggleTheme();
+            } else if (!savedTheme && prefersDark) {
+                toggleTheme();
             }
-        }
-
-        // Khởi động
-        window.onload = () => {
-            // Tạo vân tay thiết bị
-            generateFingerprint();
+        });
+        
+        // Dropdown menu
+        const copyExportButton = document.getElementById('copyExportButton');
+        const dropdown = document.querySelector('.dropdown');
+        
+        copyExportButton.addEventListener('click', () => {
+            dropdown.classList.toggle('show');
+        });
+        
+        window.addEventListener('click', (e) => {
+            if (!dropdown.contains(e.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+        
+        // Tabs phân loại
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabButtons = document.querySelectorAll('.tab-btn');
             
-            // Kiểm tra giới hạn hàng ngày
-            checkDailyLimit();
-            
-            // Kiểm tra key hiện tại
-            checkUserKey();
-            
-            // Kiểm tra DevTools
-            checkDevTools();
-            
-            // Ngăn chặn right-click
-            document.addEventListener('contextmenu', e => e.preventDefault());
-            
-            // Ngăn chặn F12 và các tổ hợp phím khác
-            document.addEventListener('keydown', e => {
-                if (e.key === 'F12' || 
-                    (e.ctrlKey && e.shiftKey && e.key === 'I') ||
-                    (e.ctrlKey && e.shiftKey && e.key === 'C') ||
-                    (e.ctrlKey && e.shiftKey && e.key === 'J') ||
-                    (e.ctrlKey && e.key === 'U')) {
-                    e.preventDefault();
-                    showAntiDebug();
-                }
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Update active tab
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('text-purple-500', 'border-b-2', 'border-purple-500', 'active');
+                        btn.classList.add('text-gray-400');
+                    });
+                    
+                    button.classList.remove('text-gray-400');
+                    button.classList.add('text-purple-500', 'border-b-2', 'border-purple-500', 'active');
+                    
+                    // Filter emails based on tab
+                    currentTab = button.dataset.tab;
+                    filterEmails();
+                });
             });
-            
-            // Ngăn chặn drag và drop
-            document.addEventListener('dragstart', e => e.preventDefault());
-            
-            // Ngăn chặn copy, cut, paste
-            document.addEventListener('copy', e => e.preventDefault());
-            document.addEventListener('cut', e => e.preventDefault());
-            document.addEventListener('paste', e => e.preventDefault());
-        };
+        });
     </script>
 </body>
 </html>
