@@ -921,12 +921,12 @@
             }, 3000);
         }
 
-        // Cải thiện kiểm tra DevTools
+        // Cải thiện kiểm tra DevTools - Giảm false positive
         function checkDevTools() {
             // Sử dụng nhiều phương pháp để phát hiện Dev Tools nhưng giảm nhạy cảm
             
             // Phương pháp 1: Kiểm tra kích thước cửa sổ với ngưỡng cao hơn
-            const threshold = 200; // Tăng ngưỡng từ 160 lên 200
+            const threshold = 400; // Tăng ngưỡng từ 200 lên 400
             
             setInterval(() => {
                 if (window.outerHeight - window.innerHeight > threshold || 
@@ -936,9 +936,25 @@
                         showAntiDebug();
                     }
                 }
-            }, 1000); // Giảm tần suất kiểm tra từ 500ms lên 1000ms
+            }, 3000); // Giảm tần suất kiểm tra từ 1000ms lên 3000ms
             
-            // Phương pháp 2: Kiểm tra performance API
+            // Phương pháp 2: Sử dụng console.log trick thay vì ghi đè console
+            const testConsole = () => {
+                const start = performance.now();
+                console.log('%c', 'color: #fff; background: #000; font-size: 100px; padding: 50px;');
+                const end = performance.now();
+                
+                // Nếu DevTools mở, console.log sẽ chậm hơn
+                if (end - start > 50 && !devToolsDetected) {
+                    devToolsDetected = true;
+                    showAntiDebug();
+                }
+            };
+            
+            // Chạy console.log trick mỗi 5 giây
+            setInterval(testConsole, 5000);
+            
+            // Phương pháp 3: Kiểm tra performance API
             const perfEntries = performance.getEntriesByType('navigation');
             if (perfEntries.length > 0) {
                 const navEntry = perfEntries[0];
@@ -947,27 +963,6 @@
                     showAntiDebug();
                 }
             }
-            
-            // Phương pháp 3: Kiểm tra console
-            const originalConsole = window.console;
-            window.console = {
-                ...originalConsole,
-                log: function(...args) {
-                    devToolsDetected = true;
-                    showAntiDebug();
-                    originalConsole.log.apply(originalConsole, args);
-                },
-                error: function(...args) {
-                    devToolsDetected = true;
-                    showAntiDebug();
-                    originalConsole.error.apply(originalConsole, args);
-                },
-                warn: function(...args) {
-                    devToolsDetected = true;
-                    showAntiDebug();
-                    originalConsole.warn.apply(originalConsole, args);
-                }
-            };
         }
 
         // Hiển thị anti-debug
