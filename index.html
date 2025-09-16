@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Key Access - Bảo mật cao</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --secondary: #8b5cf6;
+            --accent: #ec4899;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f1f5f9;
+            min-height: 100vh;
+        }
+
+        .card {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .key-item {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .key-item:hover {
+            background: rgba(30, 41, 59, 0.8);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.2);
+        }
+
+        .key-value {
+            font-family: 'Courier New', monospace;
+            word-break: break-all;
+            color: #3b82f6;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .warning-box {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid #ef4444;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .warning-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(239, 68, 68, 0.1) 0%, transparent 70%);
+            animation: pulse 3s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.3; }
+            100% { transform: scale(0.8); opacity: 0.5; }
+        }
+
+        .countdown {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(59, 130, 246, 0.2);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-left: 10px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .countdown i {
+            margin-right: 6px;
+        }
+
+        .blocked-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            backdrop-filter: blur(5px);
+        }
+
+        .blocked-content {
+            text-align: center;
+            padding: 40px;
+            background: rgba(30, 41, 59, 0.95);
+            border-radius: 16px;
+            border: 1px solid rgba(239, 68, 68, 0.5);
+            max-width: 500px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .fingerprint {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 12px;
+            color: #64748b;
+            background: rgba(15, 23, 42, 0.6);
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .rate-limit {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 12px;
+            color: #f59e0b;
+            background: rgba(15, 23, 42, 0.6);
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .device-info {
+            margin-top: 20px;
+            padding: 16px;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 8px;
+            font-size: 12px;
+            color: #64748b;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .anti-debug {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            backdrop-filter: blur(5px);
+        }
+
+        .anti-debug-content {
+            text-align: center;
+            padding: 40px;
+            background: rgba(30, 41, 59, 0.95);
+            border-radius: 16px;
+            border: 1px solid rgba(239, 68, 68, 0.5);
+            animation: shake 0.5s ease-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+            20%, 40%, 60%, 80% { transform: translateX(10px); }
+        }
+
+        .security-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(16, 185, 129, 0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            font-size: 14px;
+            color: #10b981;
+        }
+
+        .security-badge i {
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        .key-history {
+            margin-top: 20px;
+            padding: 16px;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .key-history-item {
+            padding: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        .key-history-item:last-child {
+            border-bottom: none;
+        }
+
+        .verification-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10001;
+        }
+
+        .verification-content {
+            background: rgba(30, 41, 59, 0.95);
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .captcha-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+            gap: 10px;
+        }
+
+        .captcha-input {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(59, 130, 246, 0.5);
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: white;
+            width: 100px;
+            text-align: center;
+            font-size: 18px;
+            letter-spacing: 2px;
+        }
+
+        .captcha-refresh {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.5);
+            border-radius: 6px;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .captcha-refresh:hover {
+            background: rgba(59, 130, 246, 0.3);
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center p-4 min-h-screen">
+    <!-- Anti-debug overlay -->
+    <div id="antiDebug" class="anti-debug">
+        <div class="anti-debug-content">
+            <i class="fas fa-shield-alt text-red-500 text-5xl mb-4"></i>
+            <h2 class="text-2xl font-bold mb-2 text-red-400">Phát hiện không an toàn</h2>
+            <p class="text-gray-300 mb-4">Hệ thống phát hiện có thể có hành vi không an toàn.</p>
+            <p class="text-sm text-gray-500 mb-6">Nếu bạn không mở DevTools, vui lòng nhấn "Bỏ qua" để tiếp tục.</p>
+            <div class="flex justify-center gap-4">
+                <button onclick="ignoreWarning()" class="btn">
+                    <i class="fas fa-check"></i> Bỏ qua
+                </button>
+                <button onclick="location.reload()" class="btn" style="background: linear-gradient(135deg, #6b7280, #4b5563);">
+                    <i class="fas fa-redo"></i> Làm mới
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Blocked overlay -->
+    <div id="blockedOverlay" class="blocked-overlay">
+        <div class="blocked-content">
+            <i class="fas fa-ban text-red-500 text-5xl mb-4"></i>
+            <h2 class="text-2xl font-bold mb-2 text-red-400">Truy cập bị từ chối</h2>
+            <p class="text-gray-300 mb-4">Bạn đã vượt quá giới hạn số lần lấy key mỗi ngày.</p>
+            <p class="text-sm text-gray-500">Vui lòng thử lại vào ngày mai.</p>
+            <div class="device-info mt-4">
+                <p><strong>Thông tin thiết bị:</strong></p>
+                <p id="deviceInfo"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Verification modal -->
+    <div id="verificationModal" class="verification-modal">
+        <div class="verification-content">
+            <h3 class="text-xl font-bold mb-4">Xác minh người dùng</h3>
+            <p class="text-gray-300 mb-4">Vui lòng nhập mã xác minh để tiếp tục</p>
+            <div class="captcha-container">
+                <div id="captchaDisplay" class="text-2xl font-mono tracking-wider"></div>
+                <button onclick="generateCaptcha()" class="captcha-refresh">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+            </div>
+            <input type="text" id="captchaInput" class="captcha-input" placeholder="Nhập mã">
+            <div class="mt-6 flex justify-center gap-4">
+                <button onclick="verifyCaptcha()" class="btn">
+                    <i class="fas fa-check"></i> Xác minh
+                </button>
+                <button onclick="closeVerification()" class="btn" style="background: linear-gradient(135deg, #6b7280, #4b5563);">
+                    <i class="fas fa-times"></i> Hủy
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card max-w-3xl w-full p-8 relative">
+        <!-- Security badge -->
+        <div class="security-badge">
+            <i class="fas fa-lock"></i>
+            <span>Bảo mật cao</span>
+        </div>
+
+        <!-- Fingerprint and rate limit indicators -->
+        <div class="fingerprint" id="fingerprintIndicator">
+            <i class="fas fa-fingerprint"></i>
+            <span>Đang lấy vân tay...</span>
+        </div>
+        <div class="rate-limit" id="rateLimitIndicator">
+            <i class="fas fa-chart-line"></i>
+            <span>Lần lấy: 0/5</span>
+        </div>
+
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold mb-2 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+                API Key Access
+            </h1>
+            <p class="text-gray-400">Nhận API Key của bạn với bảo mật cao cấp</p>
+        </div>
+
+        <div class="warning-box">
+            <div class="flex items-start">
+                <i class="fas fa-exclamation-triangle text-red-400 mr-3 mt-1"></i>
+                <div>
+                    <p class="font-semibold mb-1">Quy định sử dụng:</p>
+                    <ul class="text-sm text-gray-300 space-y-1">
+                        <li>• API Key chỉ có hiệu lực trong <strong>2 giờ</strong></li>
+                        <li>• Không sử dụng VPN hoặc Proxy để truy cập</li>
+                        <li>• Mỗi thiết bị chỉ nhận được <strong>5 key mỗi ngày</strong></li>
+                        <li>• Key hết hạn sẽ tự động đóng</li>
+                        <li>• Không được mở DevTools</li>
+                        <li>• Yêu cầu xác minh CAPTCHA sau mỗi 3 lần lấy key</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="keyContainer" class="mb-6">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold">API Keys của bạn</h2>
+                <div class="countdown">
+                    <i class="fas fa-clock"></i>
+                    <span id="countdown">00:00:00</span>
+                </div>
+            </div>
+            
+            <div id="keyList" class="space-y-3">
+                <!-- Keys sẽ được hiển thị ở đây -->
+            </div>
+
+            <div id="keyHistory" class="key-history" style="display: none;">
+                <h3 class="text-lg font-medium mb-2">Lịch sử sử dụng</h3>
+                <div id="historyList"></div>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <button id="refreshButton" class="btn" onclick="requestNewKey()">
+                <i class="fas fa-sync-alt"></i>
+                <span>Lấy API Key</span>
+            </button>
+        </div>
+
+        <div class="mt-8 text-center text-sm text-gray-500">
+            <p>Mỗi key chỉ có hiệu lực trong 2 giờ. Key sẽ tự động đóng khi hết hạn.</p>
+            <p class="mt-2">Bạn đã lấy: <span id="dailyCount">0</span>/5 key hôm nay</p>
+        </div>
+    </div>
+
+    <!-- Toast notification -->
+    <div id="toast" class="toast">
+        <i class="fas fa-info-circle"></i>
+        <span id="toastMessage">Thông báo</span>
+    </div>
+
+    <script>
+        // API Keys mới
+        const apiKeys = [
+            "8b9644ac0b5300e0bbd0d65f83f50b8481cfc474ef396ce334504c4acbf20d54",
+            "c07312c66e76df192ded9bb35fa4a0b30950a9202cc1321fc6ac0673d9a298b3",
+            "df8366eff6c7df65a977ac381b4975f7e2330b659cd7b230f2935a7b6d1ce3d2",
+            "54047eee29b0a3fd5b4af5daf06c4ea309fb1a9533edc301961abd768fbbd79d",
+            "add2a1d2cdc7b508e326d30b0bf9c33ab23a9c7359b36c2433087a029b773a86",
+            "8d26f18557b0deb433a10c32dbcf6f431d1ea1306eb1b2f0dbea421bf68f65fe",
+            "e5aea2bd18d64d25f95f0c3800d0321eb805a6c5c78be1f7e4ab420c3bd13224",
+            "d576ba4f174e2d134b46c99cd0e1fd3b3adad04c88fe4124e438139e24a5c21a",
+            "3eebb5fd765d1df9ff80a4bf38e207ad1d54e65a9a012c921415cb67b8dd222d",
+            "fb0896d147c114b43a29db178e62239e8752c4c4de44d09e53857bb656f9f57b",
+            "5be85e5ba9e09fedd647563f889046436fe72019ae958665042b1de8ce52305b",
+            "77b1e372d65ac0b24a9942917c4331125ef2257b8465f9aab53a153f9f2222f3",
+            "f086d8cb1f5321b4f53c0d362062aae59012658df58149944cf72a1ba3a1cf24",
+            "fa83ae341211ff7b4dc0ca0fbe37b37325f8045d998e461958909a208ee90292",
+            "d2e0bf9074e81d42d805edc5ff8694101ddb51126b7915e62dd671d05437347f",
+            "e21f89a27a8a30d5de0987136e13984f25a60530cf03acd4f8664dc0abcbff53",
+            "584680b109c8b289a6114fa67d5271aead7b00f28472e1123f1fade5f43e5656",
+            "a7ca239fd72505509155f40bc6c85273c5e6e5741b8237db1207c4e480ece317",
+            "6a741f52b71535dbcfb275c5d1af69b49ca3e7f9411aa193dc0eb4e466321841",
+            "ca845c83d4be7c2b5ca973a889a1f50b3a57fa249329683759407ddffbc1edcf",
+            "b46db6047dfc9565ca7a444cd5702d0cd0437679ad2865eacb035cb1b4d35824",
+            "b2f9661e8bdbbf5a8eb38623537e24538e3a676d309e8617afc7e66984276e2f",
+            "39772bef130e7299d97f8c947965c7bd538075325152b4f7cf53d6efb5b21898",
+            "716ddddec1bc718ebfc6ca9166cb86965cd8d5aefb920463e0cbb97770dc2b69",
+            "a3c26a36a66b93ca562c676e92acdc40f78abf7140559a620b45d69f50dea335",
+            "3fd190165b569a86414dfb549921c92d770a254529ddf6ba0ff779e14a2a60d0",
+            "6176fca7028069037d7965486eba90622ca94466c0fe73080244934d07ede402",
+            "9b78d6728810443757c5842d9137791700735d50102b45e09a07286c3ab4ae93",
+            "7c28935da677627eda2db25473b3f9cd689832bc0bf56c12902f1fc87a9484e7",
+            "211e5e70f4e708bbfe4022ac8c62ecc15803497c5a1ddcfdf2efd2af328d99a4",
+            "5647e96ccad35f35ff5bb4dfd1353048ac8fc7cec086c2f89ac75c77f4520e27",
+            "9df5c1ea0beae6594260edd2fda49695585207740b1daf7d62c75eed176a397d",
+            "5dc9f98517406ad33d3f6c808985c8dedf656ec30da6d3ae90157306c67ff503",
+            "d10ecb1915d9b2a69e23497b447fd518060fc9bb0d03bafdcb0ca19a4d20c621",
+            "ac8fed1e8d8c11da01a01ae55d771f21327c41712d6cb4acf05d15f1f74f260f",
+            "ad72573e5ecf072d65d9d679a498c83986f8895cfa22d92bb61b39eb842ff218",
+            "7e5dd3c23bc4e1d84bc979d85321751d5b2f2f9d07d847d46f9adb9763f51ecf",
+            "24b69816123ed38a909c5d688f99fd0a3ecfd53b45bc0ba5943ef1a7f0b16aeb",
+            "631efe5547d7108413b041a78c124d9b5b62f421ecc703910794c1a498173cbf",
+            "977d5f68bd71cdebf85d0fc9e5ad5aed37ccc33477fece9e80b28934498fd8ef",
+            "40094a8b82a730243dfce81b13747f51bd758e57e0955ae532a7a43a0c80d1ee",
+            "93c3f284b0e4bc3ef239b71cd0912ba65416ddaba3cb623d68d56b7c1b166ad3",
+            "7adfb6e38887934599014a67aedc9a9920a675ade53bb9952a8e7b21a62ad15a",
+            "b800bd6182895b5e9f24c8589e679d7714c8fed4514b8fce484f2570261dc477",
+            "cd4b36d07920efa40f645361e987167c6d71e04b8bcf3457f39b0798b0203828",
+            "0a41db67bad180fee3148e1a4d600518a07c0fec6c265bc6d7f0654c2e5c3508",
+            "4a3c5e59a696eae842259b6b01aef3217ff183597a4e6ebf2a13140de14fdf30",
+            "7f77360b16470825d22290ff2ff9cad859afddce37b9580a2eab0ee174865910",
+            "0caf314f99d822ef23033ced3af5998dd70ec529549447b3eb2cc273019a26ad",
+            "872b2c9bb49b6f492750f897f0b1f70f01edf5f75dd59f7a869befbf7a4d4077"
+        ];
+
+        // Khởi tạo các biến
+        let hasKey = false;
+        let countdownInterval;
+        let dailyCount = 0;
+        let deviceFingerprint = '';
+        let captchaCode = '';
+        let verificationAttempts = 0;
+        let devToolsDetected = false;
+        let warningIgnored = false;
+
+        // Lấy vân tay thiết bị
+        function generateFingerprint() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const txt = 'fingerprint';
+            
+            ctx.font = '14px Arial';
+            ctx.fillStyle = '#f60';
+            ctx.fillRect(125, 1, 62, 20);
+            ctx.fillStyle = '#069';
+            ctx.fillText(txt, 2, 15);
+            ctx.fillStyle = 'rgba(255, 0, 0, 0.5)';
+            ctx.fillText(txt, 4, 17);
+            
+            const fingerprint = canvas.toDataURL();
+            const hash = btoa(fingerprint);
+            
+            // Lấy thêm thông tin về thiết bị
+            const userAgent = navigator.userAgent;
+            const platform = navigator.platform;
+            const language = navigator.language;
+            const screenResolution = `${screen.width}x${screen.height}`;
+            const colorDepth = screen.colorDepth;
+            const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            const hardwareConcurrency = navigator.hardwareConcurrency || 'unknown';
+            const deviceMemory = navigator.deviceMemory || 'unknown';
+            
+            // Kiểm tra có phải là proxy không
+            const isProxy = checkForProxy();
+            
+            deviceFingerprint = btoa(`${hash}-${userAgent}-${platform}-${language}-${screenResolution}-${colorDepth}-${timezone}-${hardwareConcurrency}-${deviceMemory}-${isProxy}`);
+            
+            document.getElementById('fingerprintIndicator').innerHTML = `
+                <i class="fas fa-fingerprint"></i>
+                <span>Vân tay: ${deviceFingerprint.substring(0, 20)}...</span>
+            `;
+            
+            document.getElementById('deviceInfo').innerHTML = `
+                <p>User Agent: ${userAgent.substring(0, 50)}...</p>
+                <p>Platform: ${platform}</p>
+                <p>Language: ${language}</p>
+                <p>Screen: ${screenResolution}</p>
+                <p>Color Depth: ${colorDepth}</p>
+                <p>Timezone: ${timezone}</p>
+                <p>Cores: ${hardwareConcurrency}</p>
+                <p>Memory: ${deviceMemory} GB</p>
+                <p>Proxy: ${isProxy ? 'Có' : 'Không'}</p>
+            `;
+            
+            return deviceFingerprint;
+        }
+
+        // Kiểm tra có phải là proxy không
+        function checkForProxy() {
+            // Kiểm tra các thuộc tính thường bị thay đổi bởi proxy
+            const suspiciousProperties = [
+                'webdriver', 'plugins', 'mimeTypes', 'languages', 
+                'connection', 'doNotTrack', 'cookieEnabled'
+            ];
+            
+            for (let prop of suspiciousProperties) {
+                if (navigator[prop] === undefined || navigator[prop] === null) {
+                    return true;
+                }
+            }
+            
+            // Kiểm tra có phải là headless browser không
+            if (navigator.webdriver) {
+                return true;
+            }
+            
+            // Kiểm tra các chỉ số screen
+            if (screen.availWidth === 0 || screen.availHeight === 0) {
+                return true;
+            }
+            
+            return false;
+        }
+
+        // Bỏ qua cảnh báo
+        function ignoreWarning() {
+            warningIgnored = true;
+            document.getElementById('antiDebug').style.display = 'none';
+            showToast('Cảnh báo đã được bỏ qua. Hệ thống sẽ tiếp tục giám sát.');
+        }
+
+        // Kiểm tra giới hạn hàng ngày
+        function checkDailyLimit() {
+            const today = new Date().toDateString();
+            const storedDate = sessionStorage.getItem('keyDate');
+            const storedCount = sessionStorage.getItem('keyCount');
+            
+            if (storedDate === today) {
+                dailyCount = parseInt(storedCount) || 0;
+            } else {
+                dailyCount = 0;
+                sessionStorage.setItem('keyDate', today);
+            }
+            
+            updateRateLimit();
+            
+            // Nếu đã vượt quá giới hạn, hiển thị overlay
+            if (dailyCount >= 5) {
+                document.getElementById('blockedOverlay').style.display = 'flex';
+                return true;
+            }
+            
+            return false;
+        }
+
+        // Cập nhật hiển thị giới hạn
+        function updateRateLimit() {
+            document.getElementById('rateLimitIndicator').innerHTML = `
+                <i class="fas fa-chart-line"></i>
+                <span>Lần lấy: ${dailyCount}/5</span>
+            `;
+            document.getElementById('dailyCount').textContent = dailyCount;
+        }
+
+        // Kiểm tra xem người dùng đã có key chưa
+        function checkUserKey() {
+            const userKey = sessionStorage.getItem('userApiKey');
+            const keyTime = sessionStorage.getItem('keyTime');
+            
+            if (userKey && keyTime) {
+                const elapsed = Date.now() - parseInt(keyTime);
+                if (elapsed < 7200000) { // 2 giờ = 7200000 ms
+                    hasKey = true;
+                    displayKey(userKey);
+                    startCountdown(parseInt(keyTime));
+                    
+                    // Hiển thị lịch sử
+                    showKeyHistory();
+                    return true;
+                } else {
+                    // Key đã hết hạn
+                    sessionStorage.removeItem('userApiKey');
+                    sessionStorage.removeItem('keyTime');
+                }
+            }
+            return false;
+        }
+
+        // Hiển thị key
+        function displayKey(key) {
+            const keyList = document.getElementById('keyList');
+            keyList.innerHTML = `
+                <div class="key-item">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="font-medium">API Key của bạn</span>
+                        <button onclick="copyKey('${key}')" class="text-blue-400 hover:text-blue-300 flex items-center gap-1">
+                            <i class="fas fa-copy"></i> Sao chép
+                        </button>
+                    </div>
+                    <div class="key-value">${key}</div>
+                    <div class="mt-2 text-xs text-gray-500">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        Key sẽ tự động đóng khi hết hạn
+                    </div>
+                </div>
+            `;
+        }
+
+        // Sao chép key
+        function copyKey(key) {
+            navigator.clipboard.writeText(key).then(() => {
+                showToast('Đã sao chép key!');
+                
+                // Thêm vào lịch sử
+                addToHistory('Sao chép key');
+            });
+        }
+
+        // Thêm vào lịch sử
+        function addToHistory(action) {
+            const history = JSON.parse(sessionStorage.getItem('keyHistory') || '[]');
+            const now = new Date();
+            history.unshift({
+                action: action,
+                time: now.toLocaleString('vi-VN'),
+                key: hasKey ? 'Có' : 'Không'
+            });
+            
+            // Giữ chỉ 10 bản ghi gần nhất
+            if (history.length > 10) {
+                history.pop();
+            }
+            
+            sessionStorage.setItem('keyHistory', JSON.stringify(history));
+            updateKeyHistory();
+        }
+
+        // Hiển thị lịch sử
+        function showKeyHistory() {
+            const history = JSON.parse(sessionStorage.getItem('keyHistory') || '[]');
+            if (history.length > 0) {
+                document.getElementById('keyHistory').style.display = 'block';
+                updateKeyHistory();
+            }
+        }
+
+        // Cập nhật lịch sử hiển thị
+        function updateKeyHistory() {
+            const history = JSON.parse(sessionStorage.getItem('keyHistory') || '[]');
+            const historyList = document.getElementById('historyList');
+            
+            historyList.innerHTML = history.map(item => `
+                <div class="key-history-item">
+                    <div class="flex justify-between">
+                        <span>${item.action}</span>
+                        <span>${item.time}</span>
+                    </div>
+                    <div class="text-xs text-gray-500 mt-1">Trạng thái: ${item.key}</div>
+                </div>
+            `).join('');
+        }
+
+        // Yêu cầu key mới
+        function requestNewKey() {
+            // Kiểm tra giới hạn hàng ngày
+            if (checkDailyLimit()) {
+                showToast('Bạn đã vượt quá giới hạn hôm nay!');
+                return;
+            }
+
+            // Kiểm tra xem người dùng đã có key chưa
+            if (hasKey) {
+                showToast('Bạn đã có API Key rồi!');
+                return;
+            }
+
+            // Kiểm tra xem có cần xác minh không
+            if (dailyCount > 0 && dailyCount % 3 === 0) {
+                showVerificationModal();
+                return;
+            }
+
+            // Nếu không cần xác minh, lấy key ngay
+            getNewKey();
+        }
+
+        // Hiển thị modal xác minh
+        function showVerificationModal() {
+            generateCaptcha();
+            document.getElementById('verificationModal').style.display = 'flex';
+        }
+
+        // Đóng modal xác minh
+        function closeVerification() {
+            document.getElementById('verificationModal').style.display = 'none';
+            document.getElementById('captchaInput').value = '';
+        }
+
+        // Tạo CAPTCHA
+        function generateCaptcha() {
+            const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            captchaCode = '';
+            for (let i = 0; i < 5; i++) {
+                captchaCode += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            document.getElementById('captchaDisplay').textContent = captchaCode;
+        }
+
+        // Xác minh CAPTCHA
+        function verifyCaptcha() {
+            const input = document.getElementById('captchaInput').value.toUpperCase();
+            
+            if (input === captchaCode) {
+                closeVerification();
+                getNewKey();
+                addToHistory('Lấy key mới (đã xác minh)');
+            } else {
+                verificationAttempts++;
+                
+                if (verificationAttempts >= 3) {
+                    showToast('Bạn đã nhập sai quá nhiều lần. Vui lòng thử lại sau 1 phút.');
+                    closeVerification();
+                    
+                    // Đặt thời gian chờ
+                    setTimeout(() => {
+                        verificationAttempts = 0;
+                    }, 60000);
+                } else {
+                    showToast(`Mã không đúng. Bạn còn ${3 - verificationAttempts} lần thử.`);
+                }
+            }
+        }
+
+        // Lấy key mới
+        function getNewKey() {
+            // Hiển thị loading
+            const refreshButton = document.getElementById('refreshButton');
+            const originalContent = refreshButton.innerHTML;
+            refreshButton.innerHTML = '<span class="loading-spinner"></span> Đang xử lý...';
+            refreshButton.disabled = true;
+
+            // Mô phỏng thời gian xử lý
+            setTimeout(() => {
+                // Lấy key ngẫu nhiên từ danh sách
+                const randomIndex = Math.floor(Math.random() * apiKeys.length);
+                const newKey = apiKeys[randomIndex];
+                
+                // Lưu key và thời gian
+                sessionStorage.setItem('userApiKey', newKey);
+                sessionStorage.setItem('keyTime', Date.now().toString());
+                
+                // Cập nhật đếm
+                dailyCount++;
+                sessionStorage.setItem('keyCount', dailyCount.toString());
+                updateRateLimit();
+                
+                hasKey = true;
+                displayKey(newKey);
+                startCountdown(Date.now());
+                
+                showToast('Đã nhận được API Key mới!');
+                addToHistory('Lấy key mới');
+                
+                // Hiển thị lịch sử
+                showKeyHistory();
+                
+                // Khôi phục nút
+                refreshButton.innerHTML = originalContent;
+                refreshButton.disabled = false;
+            }, 1500);
+        }
+
+        // Bắt đầu đếm ngược
+        function startCountdown(keyTime) {
+            if (countdownInterval) clearInterval(countdownInterval);
+            
+            countdownInterval = setInterval(() => {
+                const elapsed = Date.now() - keyTime;
+                const remaining = Math.max(0, 7200000 - elapsed); // 2 giờ
+                
+                if (remaining === 0) {
+                    clearInterval(countdownInterval);
+                    sessionStorage.removeItem('userApiKey');
+                    sessionStorage.removeItem('keyTime');
+                    hasKey = false;
+                    document.getElementById('keyList').innerHTML = '<p class="text-gray-400">Key đã hết hạn</p>';
+                    showToast('API Key đã hết hạn!');
+                    addToHistory('Key hết hạn');
+                    return;
+                }
+                
+                const hours = Math.floor(remaining / 3600000);
+                const minutes = Math.floor((remaining % 3600000) / 60000);
+                const seconds = Math.floor((remaining % 60000) / 1000);
+                
+                document.getElementById('countdown').textContent = 
+                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        // Hiển thị toast
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Cải thiện kiểm tra DevTools
+        function checkDevTools() {
+            // Sử dụng nhiều phương pháp để phát hiện Dev Tools nhưng giảm nhạy cảm
+            
+            // Phương pháp 1: Kiểm tra kích thước cửa sổ với ngưỡng cao hơn
+            const threshold = 200; // Tăng ngưỡng từ 160 lên 200
+            
+            setInterval(() => {
+                if (window.outerHeight - window.innerHeight > threshold || 
+                    window.outerWidth - window.innerWidth > threshold) {
+                    if (!devToolsDetected) {
+                        devToolsDetected = true;
+                        showAntiDebug();
+                    }
+                }
+            }, 1000); // Giảm tần suất kiểm tra từ 500ms lên 1000ms
+            
+            // Phương pháp 2: Kiểm tra performance API
+            const perfEntries = performance.getEntriesByType('navigation');
+            if (perfEntries.length > 0) {
+                const navEntry = perfEntries[0];
+                if (navEntry.name.includes('about:blank')) {
+                    devToolsDetected = true;
+                    showAntiDebug();
+                }
+            }
+            
+            // Phương pháp 3: Kiểm tra console
+            const originalConsole = window.console;
+            window.console = {
+                ...originalConsole,
+                log: function(...args) {
+                    devToolsDetected = true;
+                    showAntiDebug();
+                    originalConsole.log.apply(originalConsole, args);
+                },
+                error: function(...args) {
+                    devToolsDetected = true;
+                    showAntiDebug();
+                    originalConsole.error.apply(originalConsole, args);
+                },
+                warn: function(...args) {
+                    devToolsDetected = true;
+                    showAntiDebug();
+                    originalConsole.warn.apply(originalConsole, args);
+                }
+            };
+        }
+
+        // Hiển thị anti-debug
+        function showAntiDebug() {
+            if (!warningIgnored && !document.getElementById('antiDebug').style.display || 
+                document.getElementById('antiDebug').style.display === 'none') {
+                document.getElementById('antiDebug').style.display = 'flex';
+                
+                // Thống kê
+                addToHistory('Phát hiện không an toàn');
+            }
+        }
+
+        // Khởi động
+        window.onload = () => {
+            // Tạo vân tay thiết bị
+            generateFingerprint();
+            
+            // Kiểm tra giới hạn hàng ngày
+            checkDailyLimit();
+            
+            // Kiểm tra key hiện tại
+            checkUserKey();
+            
+            // Kiểm tra DevTools
+            checkDevTools();
+            
+            // Ngăn chặn right-click
+            document.addEventListener('contextmenu', e => e.preventDefault());
+            
+            // Ngăn chặn F12 và các tổ hợp phím khác
+            document.addEventListener('keydown', e => {
+                if (e.key === 'F12' || 
+                    (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+                    (e.ctrlKey && e.shiftKey && e.key === 'C') ||
+                    (e.ctrlKey && e.shiftKey && e.key === 'J') ||
+                    (e.ctrlKey && e.key === 'U')) {
+                    e.preventDefault();
+                    showAntiDebug();
+                }
+            });
+            
+            // Ngăn chặn drag và drop
+            document.addEventListener('dragstart', e => e.preventDefault());
+            
+            // Ngăn chặn copy, cut, paste
+            document.addEventListener('copy', e => e.preventDefault());
+            document.addEventListener('cut', e => e.preventDefault());
+            document.addEventListener('paste', e => e.preventDefault());
+        };
+    </script>
+</body>
+</html>
